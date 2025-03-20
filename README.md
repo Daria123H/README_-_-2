@@ -1,62 +1,87 @@
 Ознайомившись та розібравшись з теоретичною частиною я перейшла до виконання завдань.
 
-#
-Завдання 2.1.
+# Завдання 2.1.
 
 Спочатку створюю файл за допомогою команди
+
 ee PR2_1.c
+
 Створила C-програму, яка визначає максимальне значення time_t.
+
 #include <stdio.h>
 #include <time.h>
 #include <limits.h>
 
-int main() {
-    time_t max_time = (time_t) ~0;  // Заповнюємо всі біти 1 (максимальне значення)
-    
-    // Перевіряємо, чи знаковий `time_t`
+//int main() {
+    time_t max_time = (time_t) ~0;  
     if (max_time < 0) {
-        max_time = max_time >> 1; // Якщо знаковий, беремо лише позитивну половину
+        max_time = max_time >> 1; 
     }
-
     printf("Максимальне значення time_t: %ld\n", (long) max_time);
     printf("Дата та час, коли time_t закінчиться: %s", ctime(&max_time));
-
     return 0;
 }
+
 Далі компілюю через clang
+
 Clang -o PR2_1 PR2_1.c
 ./PR2_1
+
 Результат:
+
 Maximum value time_t: -1
+
 Date and time, when time_t is over: Thu Jan 1 02:59:59 1970 
+
 Далі досліджуємо різницю між 32- і 64-бітною архітектурою
+
 Перевірка архітектури команди:
+
 uname -m
+
 Вивід:
+
 Amd64
+
 Далі перевірила розмір time_t
+
 getconf LONG_BIT
+
 Вивід:
+
 64
+
 Далі за допомогою коду на С перевірила розмір time_t
+//
 #include <stdio.h>
 #include <time.h>
-
 int main() {
     printf("Розмір time_t: %lu байт\n", sizeof(time_t));
     return 0;
 }
+
 Компілюю та перевіряю результат
+
 Size time_t: 8 byte
+
 За допомогою команди readelf проаналізувала ELF-файл:
+
 readelf -h time_check
+
 ELF Header:
+
 Magic:  7f 45 4c 46 02 01 01 09 00 00 00 00 00 00 00 00
+
 Class: ELF64
+
 Data: 2's complement, little endian 
+
 Version: 1 (current)
+
 OS/ABI: FreeBSD
+
 ABI Version: 0
+
 Type: EXEC (Executable file)
 Machine: Advanced Micro Devices x86-64
 Version: 0x1
